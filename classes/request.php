@@ -15,9 +15,17 @@ class Request extends Kohana_Request {
 	 * Also, a cookie with the current language will be set. Finally, the language
 	 * segment is chopped off the URI and normal request processing continues.
 	 *
-	 * @param   string   URI of the request
+	 * @param   string  $uri URI of the request
+	 * @param   Cache   $cache
+	 * @param   array   $injected_routes an array of routes to use, for testing
 	 * @return  Request
+	 * @uses    Kohana::$config
 	 * @uses    Request::detect_uri
+	 * @uses    Lang::find_default
+	 * @uses    URL::base
+	 * @uses    I18n
+	 * @uses    Cookie::get
+	 * @uses    Cookie::set
 	 */
 	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
 	{
@@ -39,15 +47,40 @@ class Request extends Kohana_Request {
 			// Find the best default language
 			$lang = Lang::find_default();
 
-			// Use the default server protocol
-			$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+			// Prepend default language if needed
+			if (Lang::$default_prepended)
+			{
+				// Use the default server protocol
+				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 
-			// Redirect to the same URI, but with language prepended
-			header($protocol.' 302 Found');
-			header('Location: '.URL::base(TRUE, TRUE).$lang.'/'.$uri);
+				// Redirect to the same URI, but with language prepended
+				header($protocol.' 302 Found');
+				header('Location: '.URL::base(TRUE, TRUE).$lang.'/'.$uri);
 
-			// Stop execution
-			exit;
+				// Stop execution
+				exit;
+			}
+			else
+			{
+				// Set the default language as the match
+				$matches[0] = Lang::$default;
+			}
+		}
+		else
+		{
+			// If default is not prepended and found language is the default, then remove it from URI
+			if ( ! Lang::$default_prepended AND strtolower($matches[0]) === Lang::$default)
+			{
+				// Use the default server protocol
+				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+
+				// Redirect to the same URI, but with default language removed
+				header($protocol.' 302 Found');
+				header('Location: '.URL::base(TRUE, TRUE).ltrim($uri, Lang::$default.'/'));
+
+				// Stop execution
+				exit;
+			}
 		}
 
 		// Language found in the URI
@@ -59,14 +92,17 @@ class Request extends Kohana_Request {
 		// Set locale
 		setlocale(LC_ALL, $langs[Request::$lang]['locale']);
 
-		// Update language cookie if needed
 		if (Cookie::get(Lang::$cookie) !== Request::$lang)
 		{
+			// Update language cookie if needed
 			Cookie::set(Lang::$cookie, Request::$lang);
 		}
 
-		// Remove language from URI
-		$uri = (string) substr($uri, strlen(Request::$lang));
+		if (Lang::$default_prepended OR Request::$lang !== Lang::$default)
+		{
+			// Remove language from URI if default is prepended or the language is not the default
+			$uri = (string) substr($uri, strlen(Request::$lang));
+		}
 
 		// Continue normal request processing with the URI without language
 		return parent::factory($uri, $cache, $injected_routes);
