@@ -3,7 +3,7 @@
 class Route extends Kohana_Route {
 
 	/**
- 	 * Extension of Route::url that adds a fourth parameter for setting a language key.
+	 * Extension of Route::url that adds a fourth parameter for setting a language key.
 	 * The current language (Request::$lang) is used by default.
 	 *
 	 *     echo Route::url('default', array('controller' => 'foo', 'action' => 'bar'), NULL, 'fr');   // custom language
