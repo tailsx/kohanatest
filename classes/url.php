@@ -19,19 +19,16 @@ class URL extends Kohana_URL {
 	 */
 	public static function site($uri = '', $protocol = NULL, $index = TRUE, $lang = TRUE)
 	{
-		if (Lang::$default_prepended OR Request::$lang !== Lang::$default)
+		// Prepend language to URI if it needs to be prepended or it's not the default
+		if ($lang === TRUE AND (Lang::$default_prepended OR Request::$lang !== Lang::$default))
 		{
-			// Prepend language to URI if it needs to be prepended or it's not the default
-			if ($lang === TRUE)
-			{
-				// Prepend the current language to the URI
-				$uri = Request::$lang.'/'.ltrim($uri, '/');
-			}
-			elseif (is_string($lang))
-			{
-				// Prepend a custom language to the URI
-				$uri = $lang.'/'.ltrim($uri, '/');
-			}
+			// Prepend the current language to the URI
+			$uri = Request::$lang.'/'.ltrim($uri, '/');
+		}
+		elseif (is_string($lang))
+		{
+			// Prepend a custom language to the URI
+			$uri = $lang.'/'.ltrim($uri, '/');
 		}
 
 		return parent::site($uri, $protocol, $index);
