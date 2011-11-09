@@ -56,4 +56,4 @@ To have this URL load the appropriate controller and action you have to edit the
 		'contact'   => 'kontakt',
 	),
 
-For routes that have custom params in them do the same as you would do with the controller or action.
+For routes that have custom params (for example *page*) in them do the same as you would do with the controller or action. Be sure to check out the `config/lang.php` for more examples.
