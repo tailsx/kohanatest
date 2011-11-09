@@ -22,6 +22,7 @@ class Request extends Kohana_Request {
 	 * @uses    Kohana::$config
 	 * @uses    Request::detect_uri
 	 * @uses    Lang::find_default
+	 * @uses    Request::lang_redirect
 	 * @uses    URL::base
 	 * @uses    I18n
 	 * @uses    Cookie::get
@@ -50,15 +51,8 @@ class Request extends Kohana_Request {
 			// Prepend default language if needed
 			if (Lang::$default_prepended)
 			{
-				// Use the default server protocol
-				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-
 				// Redirect to the same URI, but with language prepended
-				header($protocol.' 302 Found');
-				header('Location: '.URL::base(TRUE, TRUE).$lang.'/'.$uri);
-
-				// Stop execution
-				exit;
+				Request::lang_redirect($lang, '/'.$uri);
 			}
 			else
 			{
@@ -71,15 +65,8 @@ class Request extends Kohana_Request {
 			// If default is not prepended and found language is the default, then remove it from URI
 			if ( ! Lang::$default_prepended AND strtolower($matches[0]) === Lang::$default)
 			{
-				// Use the default server protocol
-				$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-
 				// Redirect to the same URI, but with default language removed
-				header($protocol.' 302 Found');
-				header('Location: '.URL::base(TRUE, TRUE).ltrim($uri, Lang::$default.'/'));
-
-				// Stop execution
-				exit;
+				Request::lang_redirect(NULL, ltrim($uri, Lang::$default.'/'));
 			}
 		}
 
@@ -106,6 +93,107 @@ class Request extends Kohana_Request {
 
 		// Continue normal request processing with the URI without language
 		return parent::factory($uri, $cache, $injected_routes);
+	}
+
+	/**
+	 * Creates a new request object for the given URI. New requests should be
+	 * created using the [Request::instance] or [Request::factory] methods.
+	 *
+	 *     $request = new Request($uri);
+	 *
+	 * If $cache parameter is set, the response for the request will attempt to
+	 * be retrieved from the cache.
+	 *
+	 * @param   string  $uri URI of the request
+	 * @param   HTTP_Cache   $cache
+	 * @param   array   $injected_routes an array of routes to use, for testing
+	 * @return  void
+	 * @throws  Request_Exception
+	 * @uses    Route::all
+	 * @uses    Route::matches
+	 * @uses    Request::lang_redirect
+	 */
+	public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
+	{
+		parent::__construct($uri, $cache, $injected_routes);
+
+		// Translate route params to current language if possible
+		if (Request::$lang !== Lang::$default)
+		{
+			// No redirect by default
+			$redirect = FALSE;
+
+			// Set params to translate
+			$params_to_translate = $this->_params;
+
+			// Add controller and action to params to translate
+			$params_to_translate['controller'] = $this->_controller;
+			$params_to_translate['action']     = $this->_action;
+
+			foreach ($params_to_translate as $param => $value)
+			{
+				if ($param_translations = Kohana::$config->load('lang.'.Request::$lang.'.'.$param))
+				{
+					// Translate param
+					$translated_param = Arr::get($param_translations, $value);
+
+					if ($translated_param === NULL AND $duplicate_param = array_search($value, $param_translations))
+					{
+						// The original param is given, to avoid duplicate
+						// content replace it with duplicate param which will
+						// be translated to the original param
+						$uri = str_replace($value, $duplicate_param, $uri);
+
+						// Redirect will be needed
+						$redirect = TRUE;
+					}
+					elseif ($translated_param)
+					{
+						if ($param === 'controller')
+						{
+							// Set controller to translated param
+							$this->_controller = $translated_param;
+						}
+						elseif ($param === 'action')
+						{
+							// Set action to translated param
+							$this->_action = $translated_param;
+						}
+						else
+						{
+							// Set param to translated param
+							$this->_params[$param] = $translated_param;
+						}
+					}
+				}
+			}
+
+			if ($redirect)
+			{
+				// Redirect to avoid duplicate content
+				$this->lang_redirect(Request::$lang, $uri);
+			}
+		}
+	}
+
+	/**
+	 * Redirects with or without language
+	 *
+	 * @param  string  $lang
+	 * @param  string  $uri
+	 * @return void
+	 */
+	public static function lang_redirect($lang, $uri)
+	{
+		// Use the default server protocol
+		$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+
+		// Set headers
+		header($protocol.' 302 Found');
+		header('Location: '.URL::base(TRUE, TRUE).$lang.$uri);
+
+		// Stop execution
+		exit;
 	}
 
 } // End Request
