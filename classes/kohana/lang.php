@@ -33,9 +33,11 @@ class Kohana_Lang {
 		// Look for language cookie first
 		if ($lang = Cookie::get(Lang::$cookie))
 		{
-			// Valid language found in cookie
 			if (isset($langs[$lang]))
+			{
+				// Valid language found in cookie
 				return $lang;
+			}
 
 			// Delete cookie with invalid language
 			Cookie::delete(Lang::$cookie);
@@ -44,13 +46,15 @@ class Kohana_Lang {
 		// Parse HTTP Accept-Language headers
 		foreach (Request::accept_lang() as $lang => $quality)
 		{
-			// Return the first language found (the language with the highest quality)
 			if (isset($langs[$lang]))
+			{
+				// Return the first language found (the language with the highest quality)
 				return $lang;
+			}
 		}
 
 		// Return the hard-coded default language as final fallback
 		return Lang::$default;
 	}
 
-}
+} // End Kohana_Lang
