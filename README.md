@@ -38,22 +38,23 @@ In the `config/lang.php` file you can set all available languages for your site.
 
 To change the hard-coded default language (`'en'`), set `Lang::$default` in your `bootstrap.php` file. You can also change the name of the language cookie (`'lang'`) by setting `Lang::$cookie`.
 
+To set if the default language is prepended or omitted from the URL use the `Lang::$default_prepended` setting.
+
+You can enable i18n routes by setting the `Lang::$i18n_routes` setting to `TRUE` (by default i18n routes are disabled).
+
 i18n routes
 -----------
 
-The module makes it possible to have i18n routes without having to define additional controllers or actions. To achieve this in the following example we will set up a URL that will be translated when needed.
+The module makes it possible to have i18n routes (after setting `Lang::$i18n_routes` to `TRUE`) without having to define additional controllers or actions. To achieve this in the following example we will set up a URL that will be translated when needed.
 
 	Route::url('default', array('controller' => __('welcome'), 'action' => __('contact'));
 
 When using the default language (in our example 'en') this will generate an URL like this: *http://domain.com/welcome/contact*. If you define the translations of *welcome* and *contact* in your i18n files (the default, Kohana way) you'll get an URL like this when using 'de' as an example language: *http://domain.com/de/wilkommen/kontakt*
 
-To have this URL load the appropriate controller and action you have to edit the `config/lang.php` and define which translated controller and action points to which default controller and action. To do this find the 'de' language in the config file and add the following arrays:
+So to have i18n routes work all you have to do is edit your i18n files (for example `i18n/de.php`) and define which translated controller and action points to which default controller and action:
 
-	'controller' => array(
-		'wilkommen' => 'welcome',
-	),
-	'action'        => array(
-		'kontakt'   => 'contact',
-	),
+	// My translated controllers, actions and custom route params
+	'wilkommen' => 'welcome',
+	'kontakt'   => 'contact',
 
-For routes that have custom params (for example *page*) in them do the same as you would do with the controller or action. Be sure to check out the `config/lang.php` for more examples.
+For routes that have custom params (for example *page*) in them do the same as you would do with the controller or action.

@@ -117,12 +117,9 @@ class Request extends Kohana_Request {
 	{
 		parent::__construct($uri, $cache, $injected_routes);
 
-		// Translate route params to current language if possible
-		if (Request::$lang !== Lang::$default)
+		// Translate route params to current language if needed and if possible
+		if (Lang::$i18n_routes AND Request::$lang !== Lang::$default)
 		{
-			// No redirect by default
-			$redirect = FALSE;
-
 			// Set params to translate
 			$params_to_translate = $this->_params;
 
@@ -130,48 +127,43 @@ class Request extends Kohana_Request {
 			$params_to_translate['controller'] = $this->_controller;
 			$params_to_translate['action']     = $this->_action;
 
+			// Load i18n table
+			$i18n_table = I18n::load(I18n::$lang);
+
 			foreach ($params_to_translate as $param => $value)
 			{
-				if ($param_translations = Kohana::$config->load('lang.'.Request::$lang.'.'.$param))
+				// Translate param
+				$translated_param = array_search($value, $i18n_table);
+
+				if ($value !== ($available_translated_param = __($value)))
 				{
-					// Translate param
-					$translated_param = Arr::get($param_translations, $value);
+					// The original param is given, while translated param is
+					// available for the current language. To avoid duplicate
+					// content replace it with available translated param which
+					// will be translated to the original param after redirect.
+					$uri = str_replace($value, $available_translated_param, $uri);
 
-					if ($translated_param === NULL AND $duplicate_param = array_search($value, $param_translations))
+					// Redirect to avoid duplicate content
+					Request::lang_redirect(Request::$lang, $uri);
+				}
+				elseif ($translated_param !== FALSE)
+				{
+					if ($param === 'controller')
 					{
-						// The original param is given, to avoid duplicate
-						// content replace it with duplicate param which will
-						// be translated to the original param
-						$uri = str_replace($value, $duplicate_param, $uri);
-
-						// Redirect will be needed
-						$redirect = TRUE;
+						// Set controller to translated param
+						$this->_controller = $translated_param;
 					}
-					elseif ($translated_param)
+					elseif ($param === 'action')
 					{
-						if ($param === 'controller')
-						{
-							// Set controller to translated param
-							$this->_controller = $translated_param;
-						}
-						elseif ($param === 'action')
-						{
-							// Set action to translated param
-							$this->_action = $translated_param;
-						}
-						else
-						{
-							// Set param to translated param
-							$this->_params[$param] = $translated_param;
-						}
+						// Set action to translated param
+						$this->_action = $translated_param;
+					}
+					else
+					{
+						// Set param to translated param
+						$this->_params[$param] = $translated_param;
 					}
 				}
-			}
-
-			if ($redirect)
-			{
-				// Redirect to avoid duplicate content
-				$this->lang_redirect(Request::$lang, $uri);
 			}
 		}
 	}

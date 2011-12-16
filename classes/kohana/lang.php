@@ -18,6 +18,11 @@ class Kohana_Lang {
 	public static $default_prepended = TRUE;
 
 	/**
+	 * @var  boolean  enable or disable i18n routes
+	 */
+	public static $i18n_routes = FALSE;
+
+	/**
 	 * Looks for the best default language available and returns it.
 	 * A language cookie and HTTP Accept-Language headers are taken into account.
 	 *
