@@ -62,4 +62,21 @@ class Kohana_Lang {
 		return Lang::$default;
 	}
 
+    /**
+     * Return the short code for the current language.
+     *
+     * @param   string  $language
+     * @return  string
+     */
+    public static function shortcode($language = NULL)
+    {
+        if ($language === NULL)
+        {
+            // Set language to current language
+            $language = i18n::$lang;
+        }
+
+        return substr($language, 0, strpos($language, '-'));
+    }
+
 } // End Kohana_Lang
