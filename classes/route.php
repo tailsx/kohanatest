@@ -293,8 +293,6 @@ class Route extends Kohana_Route {
             return parent::matches($uri);
         }
 
-        echo 'matches<hr>';
-
         // Set params
         $params = parent::matches($uri);
 
