@@ -2,15 +2,15 @@
 
 class Flexilang_Lang {
 
-	/**
-	 * @var  boolean  this will force the default language to be prepended or not
-	 */
-	public static $default_prepended = TRUE;
+    /**
+     * @var  boolean  this will force the default language to be prepended or not
+     */
+    public static $default_prepended = TRUE;
 
-	/**
-	 * @var  boolean  enable or disable i18n routes
-	 */
-	public static $i18n_routes = FALSE;
+    /**
+     * @var  boolean  enable or disable i18n routes
+     */
+    public static $i18n_routes = FALSE;
 
     /**
      * Finds the current language or falls back to default if no available
