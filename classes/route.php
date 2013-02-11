@@ -21,11 +21,11 @@ class Route extends Kohana_Route {
      */
     public static function map($value, $target)
     {
-        if ( ! isset(Route::$_language_config) OR $target !== Lang::shortcode())
+        if ( ! isset(Route::$_language_config[$target]) OR $target !== Lang::shortcode())
         {
             // Load configuration if not yet loaded or the target language is
             // not the current language which means translation is needed
-            Route::$_language_config = (array) Kohana::$config->load('lang.'.$target.'.translations');
+            Route::$_language_config[$target] = (array) Kohana::$config->load('lang.'.$target.'.translations');
         }
 
         if ($target === Lang::shortcode(I18n::$source) OR $value === NULL)
@@ -35,7 +35,7 @@ class Route extends Kohana_Route {
         }
 
         // Return translated value if possible or fall back to source value
-        return Arr::get(Route::$_language_config, $value, $value);
+        return Arr::get(Route::$_language_config[$target], $value, $value);
     }
 
     /**
@@ -52,10 +52,10 @@ class Route extends Kohana_Route {
      */
     public static function remap($value)
     {
-        if ( ! isset(Route::$_language_config))
+        if ( ! isset(Route::$_language_config[Lang::shortcode()]))
         {
             // Load configuration
-            Route::$_language_config = (array) Kohana::$config->load('lang.'.Lang::shortcode().'.translations');
+            Route::$_language_config[Lang::shortcode()] = (array) Kohana::$config->load('lang.'.Lang::shortcode().'.translations');
         }
 
         if (I18n::$lang === I18n::$source OR $value === NULL)
@@ -64,7 +64,7 @@ class Route extends Kohana_Route {
             return $value;
         }
 
-        if ($match = array_search($value, Route::$_language_config))
+        if ($match = array_search($value, Route::$_language_config[Lang::shortcode()]))
         {
             // Source of translated value is found, return source
             return $match;
@@ -292,6 +292,8 @@ class Route extends Kohana_Route {
             // i18n routes are off
             return parent::matches($uri);
         }
+
+        echo 'matches<hr>';
 
         // Set params
         $params = parent::matches($uri);
