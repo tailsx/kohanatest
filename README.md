@@ -68,7 +68,7 @@ In the following example the module will look for translations of the `controlle
             'controller' => 'welcome',
             'action'     => 'index',
         ))
-            ->translate(array(
+        ->translate(array(
             '<controller>' => TRUE,
             '<action>'     => TRUE,
         ));
@@ -81,7 +81,7 @@ In the next example the module translates the `action` parameter, the static `cu
         ->defaults(array(
             'controller' => 'special',
         ))
-            ->translate(array(
+        ->translate(array(
             'special'  => TRUE,
             '<action>' => TRUE,
             'page'     => TRUE,
