@@ -2,10 +2,10 @@
 
 class Request extends Kohana_Request {
 
-	/**
-	 * @var  string  the language of the main request
-	 */
-	public static $lang;
+    /**
+     * @var  string  the language of the main request
+     */
+    public static $lang;
 
     /**
      * Extension of the main request factory. If none given, the URI will
@@ -31,8 +31,8 @@ class Request extends Kohana_Request {
      * @uses    Lang::$cookie
      * @uses    Cookie::set
      */
-	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
-	{
+    public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
+    {
         // Load config
         $config = Lang::config();
 
@@ -82,7 +82,7 @@ class Request extends Kohana_Request {
 
         // Continue normal request processing with the URI without language
         return parent::factory($uri, $cache, $injected_routes);
-	}
+    }
 
     /**
      * Redirects with or without language
@@ -92,17 +92,17 @@ class Request extends Kohana_Request {
      * @return  void
      * @uses    URL::base
      */
-	public static function lang_redirect($lang, $uri)
-	{
+    public static function lang_redirect($lang, $uri)
+    {
         // Use the default server protocol
         $protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
-        
+
         // Set headers
         header($protocol.' 302 Found');
         header('Location: '.URL::base(TRUE, TRUE).$lang.$uri);
 
         // Stop execution
         exit;
-	}
+    }
 
 } // End Request
