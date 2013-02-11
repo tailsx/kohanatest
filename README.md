@@ -41,7 +41,7 @@ If somebody visits `http://example.com/page`, without a language, the best defau
 
 It is important to be aware that the *language part is completely chopped off* of the URI. When normal request processing continues it, it does so with a URI without language. This means that **your routes must not contain a `<lang>` key**. Also, you can create HMVC subrequests without having to worry about adding the current language to the URI.
 
-The one thing we still need to take care of then, is that any generated URLs should contain the language. An extension of `URL::site` and `Route::url` is created for this. A third argument for `URL::site` and a fourth for `Route::url` is added (`$lang`). By default, the current language is used (`Request::$lang`). You can also provide another language key as a string, or set the argument to `FALSE` to generate a URL without language.
+The one thing we still need to take care of then, is that any generated URLs should contain the language. An extension of `URL::site` and `Route::url` is created for this. A third argument for `URL::site` and a fourth for `Route::url` is added (`$lang`). By default, the current language is used (`Request::$lang`). You can also provide another language key as a string, or set the argument to *FALSE* to generate a URL without language.
 
 Configuration
 -------------
@@ -52,19 +52,19 @@ To change the hard-coded default language (`'en'`), set `Lang::$default` in your
 
 To set if the default language is prepended or omitted from the URL use the `Lang::$default_prepended` setting.
 
-You can enable i18n routes by setting the `Lang::$i18n_routes` setting to `TRUE` (by default i18n routes are disabled).
+You can enable i18n routes by setting the `Lang::$i18n_routes` setting to *TRUE* (by default i18n routes are disabled).
 
 i18n routes
 -----------
 
-The module makes it possible to have i18n routes (after setting `Lang::$i18n_routes` to `TRUE`) without having to define additional controllers or actions. To set up i18n routes you have to define which route parameters should be translated for a certain route.
+The module makes it possible to have i18n routes (after setting `Lang::$i18n_routes` to *TRUE*) without having to define additional controllers or actions. To set up i18n routes you have to define which route parameters should be translated for a certain route.
 
 ### Default route example
 
 In the following example the module will look for translations of the `controller` and `action` parameters, while the `id` parameter is not translated.
 
     Route::set('default', '(<controller>(/<action>(/<id>)))')
-            ->defaults(array(
+        ->defaults(array(
             'controller' => 'welcome',
             'action'     => 'index',
         ))
@@ -78,7 +78,7 @@ In the following example the module will look for translations of the `controlle
 In the next example the module translates the `action` parameter, the static `custom` and `page` values, and the values in the regex (`hello` and `goodbye`).
 
     Route::set('special', 'special/<action>(/page/<id>)', array('action' => 'hello|goodbye'))
-            ->defaults(array(
+        ->defaults(array(
             'controller' => 'special',
         ))
             ->translate(array(
@@ -94,10 +94,10 @@ In the next example the module translates the `action` parameter, the static `cu
 The following example will first translate the complete route and later the action parameter:
 
     Route::set('superspecial', 'special-<action>-now', array('action' => '[a-zA-Z]++'))
-            ->defaults(array(
+        ->defaults(array(
             'controller' => 'superspecial',
         ))
-            ->translate(array(
+        ->translate(array(
             'special-<action>-now' => TRUE,
             '<action>'             => TRUE,
         ));
