@@ -101,7 +101,7 @@ class Flexilang_Lang {
 
     /**
      * Looks for the best default language available and returns it
-     * 
+     *
      * A language cookie and HTTP Accept-Language headers are taken into account.
      *
      *     $lang = Lang::default();

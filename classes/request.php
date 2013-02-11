@@ -7,40 +7,40 @@ class Request extends Kohana_Request {
 	 */
 	public static $lang;
 
-	/**
-	 * Extension of the main request factory. If none given, the URI will
-	 * be automatically detected. If the URI contains no language segment, the user
-	 * will be redirected to the same URI with the default language prepended.
-	 * If the URI does contain a language segment, I18n and locale will be set.
-	 * Also, a cookie with the current language will be set. Finally, the language
-	 * segment is chopped off the URI and normal request processing continues.
-	 *
-	 * @param   string  $uri URI of the request
-	 * @param   Cache   $cache
-	 * @param   array   $injected_routes an array of routes to use, for testing
-	 * @return  Request
+    /**
+     * Extension of the main request factory. If none given, the URI will
+     * be automatically detected. If the URI contains no language segment, the user
+     * will be redirected to the same URI with the default language prepended.
+     * If the URI does contain a language segment, I18n and locale will be set.
+     * Also, a cookie with the current language will be set. Finally, the language
+     * segment is chopped off the URI and normal request processing continues.
+     *
+     * @param   string  $uri URI of the request
+     * @param   Cache   $cache
+     * @param   array   $injected_routes an array of routes to use, for testing
+     * @return  Request
      * @uses    Lang::config
-	 * @uses    Request::detect_uri
-	 * @uses    Lang::find_current
+     * @uses    Request::detect_uri
+     * @uses    Lang::find_current
      * @uses    Lang::$default_prepended
      * @uses    Lang::$default
-	 * @uses    Request::lang_redirect
+     * @uses    Request::lang_redirect
      * @uses    Request::$lang
      * @uses    I18n::$lang
      * @uses    Cookie::get
      * @uses    Lang::$cookie
      * @uses    Cookie::set
-	 */
+     */
 	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
 	{
-		// Load config
+        // Load config
         $config = Lang::config();
 
-		if ($uri === TRUE)
-		{
-			// We need the current URI
-			$uri = Request::detect_uri();
-		}
+        if ($uri === TRUE)
+        {
+            // We need the current URI
+            $uri = Request::detect_uri();
+        }
 
         // Get current language from URI
         $current_language = Lang::find_current($uri);
@@ -59,50 +59,50 @@ class Request extends Kohana_Request {
             Request::lang_redirect($current_language, $uri);
         }
 
-		// Language found in the URI
-		Request::$lang = $current_language;
+        // Language found in the URI
+        Request::$lang = $current_language;
 
-		// Store target language in I18n
-		I18n::$lang = $config[Request::$lang]['i18n_code'];
+        // Store target language in I18n
+        I18n::$lang = $config[Request::$lang]['i18n_code'];
 
-		// Set locale
-		setlocale(LC_ALL, $config[Request::$lang]['locale']);
+        // Set locale
+        setlocale(LC_ALL, $config[Request::$lang]['locale']);
 
-		if (Cookie::get(Lang::$cookie) !== Request::$lang)
-		{
-			// Update language cookie if needed
-			Cookie::set(Lang::$cookie, Request::$lang);
-		}
+        if (Cookie::get(Lang::$cookie) !== Request::$lang)
+        {
+            // Update language cookie if needed
+            Cookie::set(Lang::$cookie, Request::$lang);
+        }
 
-		if (Lang::$default_prepended OR Request::$lang !== Lang::$default)
-		{
-			// Remove language from URI if default is prepended or the language is not the default
-			$uri = (string) substr($uri, strlen(Request::$lang) + 1);
-		}
+        if (Lang::$default_prepended OR Request::$lang !== Lang::$default)
+        {
+            // Remove language from URI if default is prepended or the language is not the default
+            $uri = (string) substr($uri, strlen(Request::$lang) + 1);
+        }
 
-		// Continue normal request processing with the URI without language
-		return parent::factory($uri, $cache, $injected_routes);
+        // Continue normal request processing with the URI without language
+        return parent::factory($uri, $cache, $injected_routes);
 	}
 
-	/**
-	 * Redirects with or without language
-	 *
-	 * @param   string  $lang
-	 * @param   string  $uri
-	 * @return  void
+    /**
+     * Redirects with or without language
+     *
+     * @param   string  $lang
+     * @param   string  $uri
+     * @return  void
      * @uses    URL::base
-	 */
+     */
 	public static function lang_redirect($lang, $uri)
 	{
-		// Use the default server protocol
-		$protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+        // Use the default server protocol
+        $protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
+        
+        // Set headers
+        header($protocol.' 302 Found');
+        header('Location: '.URL::base(TRUE, TRUE).$lang.$uri);
 
-		// Set headers
-		header($protocol.' 302 Found');
-		header('Location: '.URL::base(TRUE, TRUE).$lang.$uri);
-
-		// Stop execution
-		exit;
+        // Stop execution
+        exit;
 	}
 
 } // End Request
