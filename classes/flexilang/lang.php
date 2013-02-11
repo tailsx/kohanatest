@@ -99,20 +99,20 @@ class Flexilang_Lang {
      */
     public static $default = 'en';
 
-	/**
-	 * Looks for the best default language available and returns it
+    /**
+     * Looks for the best default language available and returns it
+     * 
+     * A language cookie and HTTP Accept-Language headers are taken into account.
      *
-	 * A language cookie and HTTP Accept-Language headers are taken into account.
-	 *
-	 *     $lang = Lang::default();
-	 *
-	 * @return  string  language key, e.g. "en", "fr", "nl", etc.
+     *     $lang = Lang::default();
+     *
+     * @return  string  language key, e.g. "en", "fr", "nl", etc.
      * @uses    Lang::available_languages
      * @uses    Cookie::get
      * @uses    Lang::$cookie
      * @uses    Request::accept_lang
      * @uses    Lang::$default
-	 */
+     */
 	public static function find_default()
 	{
 		// All available languages
