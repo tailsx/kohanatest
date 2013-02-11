@@ -356,7 +356,7 @@ class Route extends Kohana_Route {
             // i18n routes are off, build URI
             $uri = parent::uri($params);
 
-            if (Request::$lang !== Lang::$default OR ($forced_language AND $lang !== Lang::$default))
+            if (Lang::$default_prepended OR (Request::$lang !== Lang::$default AND $lang !== Lang::$default) OR ($forced_language AND $lang !== Lang::$default))
             {
                 // Prepend the target language to the URI if needed
                 $uri = $lang.'/'.ltrim($uri, '/');
