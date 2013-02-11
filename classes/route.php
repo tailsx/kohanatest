@@ -342,12 +342,6 @@ class Route extends Kohana_Route {
      */
     public function uri(array $params = NULL, $lang = NULL)
     {
-        if ( ! Lang::$i18n_routes)
-        {
-            // i18n routes are off
-            return parent::uri($params);
-        }
-
         // Forced language
         $forced_language = ($lang !== NULL);
 
@@ -355,6 +349,21 @@ class Route extends Kohana_Route {
         {
             // Set target language to current language
             $lang = Lang::shortcode(I18n::$lang);
+        }
+
+        if ( ! Lang::$i18n_routes)
+        {
+            // i18n routes are off, build URI
+            $uri = parent::uri($params);
+
+            if (Request::$lang !== Lang::$default OR ($forced_language AND $lang !== Lang::$default))
+            {
+                // Prepend the target language to the URI if needed
+                $uri = $lang.'/'.ltrim($uri, '/');
+            }
+
+            // Return URI with or without language
+            return $uri;
         }
 
         // Make sure text values are in correct language
