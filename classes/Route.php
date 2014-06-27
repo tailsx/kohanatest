@@ -325,7 +325,7 @@ class Route extends Kohana_Route {
                 {
                     // If param might be translated see if it needs to be
                     // converted back to application (source) language
-                    $source_param = Route::remap($param);
+                    $source_param = Route::remap(strtolower($param));
 
                     if (Request::$lang !== Lang::$default AND isset($this->_translate['<'.$label.'>']) AND $source_param === $param AND strtolower($param) !== $this->_defaults[$label])
                     {
