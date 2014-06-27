@@ -132,7 +132,7 @@ class Flexilang_Lang {
 		}
 
 		// Parse HTTP Accept-Language headers
-		foreach (Request::accept_lang() as $lang => $quality)
+		foreach (Request::accepted_languages() as $lang => $quality)
 		{
 			if (isset($available_languages[$lang]))
 			{
@@ -157,7 +157,7 @@ class Flexilang_Lang {
         if ($language === NULL)
         {
             // Set language to current language
-            $language = i18n::$lang;
+            $language = I18n::$lang;
         }
 
         return substr($language, 0, strpos($language, '-'));
@@ -168,17 +168,17 @@ class Flexilang_Lang {
      *
      * @param   string  $language  the language to get the i18n code for
      * @return  string
-     * @uses    i18n::$lang
+     * @uses    I18n::$lang
      */
     public static function i18ncode($language = NULL)
     {
         if ($language === NULL)
         {
             // Return the current language's i18n code
-            return i18n::$lang;
+            return I18n::$lang;
         }
 
         return Kohana::$config->load('lang.'.$language.'.i18n_code');
     }
 
-} // End Flexilang_Lang
+}

@@ -197,6 +197,7 @@ class Route extends Kohana_Route {
      *     }
      *
      * @param   boolean $save   cache the current routes
+     * @param   boolean $append append, rather than replace, cached routes when loading
      * @return  void    when saving routes
      * @return  boolean when loading routes
      * @uses    I18n::$lang
@@ -205,7 +206,7 @@ class Route extends Kohana_Route {
      * @uses    Kohana_Exception
      * @uses    Route::$cache
      */
-    public static function cache($save = FALSE)
+    public static function cache($save = FALSE, $append = FALSE)
     {
         // Set route cache key
         $key = 'Route::cache('.I18n::$lang.')';
@@ -222,14 +223,23 @@ class Route extends Kohana_Route {
                 // We most likely have a lambda in a route, which cannot be cached
                 throw new Kohana_Exception('One or more routes could not be cached (:message)', array(
                     ':message' => $e->getMessage(),
-                ));
+                ), 0, $e);
             }
         }
         else
         {
             if ($routes = Kohana::cache($key))
             {
-                Route::$_routes = $routes;
+                if ($append)
+                {
+                    // Append cached routes
+                    Route::$_routes += $routes;
+                }
+                else
+                {
+                    // Replace existing routes
+                    Route::$_routes = $routes;
+                }
 
                 // Routes were cached
                 return Route::$cache = TRUE;
@@ -272,12 +282,23 @@ class Route extends Kohana_Route {
     }
 
     /**
-     * Tests if the route matches a given URI. A successful match will return
-     * all of the routed parameters (in English!) as an array. A failed match
-     * will return boolean FALSE.
+     * Tests if the route matches a given Request. A successful match will return
+     * all of the routed parameters as an array. A failed match will return
+     * boolean FALSE.
      *
-     * @return  array               on success
-     * @return  FALSE               on failure
+     *     // Params: controller = users, action = edit, id = 10
+     *     $params = $route->matches(Request::factory('users/edit/10'));
+     *
+     * This method should almost always be used within an if/else block:
+     *
+     *     if ($params = $route->matches($request))
+     *     {
+     *         // Parse the parameters
+     *     }
+     *
+     * @param   Request $request  Request object to match
+     * @return  array             on success
+     * @return  FALSE             on failure
      * @uses    Lang::$i18n_routes
      * @uses    Route::matches
      * @uses    Route::remap
@@ -285,16 +306,16 @@ class Route extends Kohana_Route {
      * @uses    Lang::$default
      * @uses    HTTP_Exception_404
      */
-    public function matches($uri)
+    public function matches(Request $request)
     {
         if ( ! Lang::$i18n_routes)
         {
             // i18n routes are off
-            return parent::matches($uri);
+            return parent::matches($request);
         }
 
         // Set params
-        $params = parent::matches($uri);
+        $params = parent::matches($request);
 
         if ($params !== FALSE)
         {
@@ -306,11 +327,11 @@ class Route extends Kohana_Route {
                     // converted back to application (source) language
                     $source_param = Route::remap($param);
 
-                    if (Request::$lang !== Lang::$default AND isset($this->_translate['<'.$label.'>']) AND $source_param === $param AND $param !== $this->_defaults[$label])
+                    if (Request::$lang !== Lang::$default AND isset($this->_translate['<'.$label.'>']) AND $source_param === $param AND strtolower($param) !== $this->_defaults[$label])
                     {
                         // To avoid duplicate content throw 404
                         throw new HTTP_Exception_404('The requested URL :uri was not found on this server.', array(
-                            ':uri' => $uri
+                            ':uri' => $request->uri(),
                         ));
                     }
 
@@ -394,4 +415,4 @@ class Route extends Kohana_Route {
         return $uri;
     }
 
-} // End Route
+}

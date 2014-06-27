@@ -31,7 +31,7 @@ class Request extends Kohana_Request {
      * @uses    Lang::$cookie
      * @uses    Cookie::set
      */
-    public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
+    public static function factory($uri = TRUE, $client_params = array(), $allow_external = TRUE, $injected_routes = array())
     {
         // Load config
         $config = Lang::config();
@@ -81,7 +81,7 @@ class Request extends Kohana_Request {
         }
 
         // Continue normal request processing with the URI without language
-        return parent::factory($uri, $cache, $injected_routes);
+        return parent::factory($uri, $client_params, $allow_external, $injected_routes);
     }
 
     /**
@@ -105,4 +105,15 @@ class Request extends Kohana_Request {
         exit;
     }
 
-} // End Request
+    /**
+     * Returns the accepted languages.
+     *
+     * @return  mixed   An array of all types or a specific type as a string
+     * @uses    Request::_parse_accept
+     */
+    public static function accepted_languages()
+    {
+        return Request::_parse_accept($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    }
+
+}
