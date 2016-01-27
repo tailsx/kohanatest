@@ -146,6 +146,6 @@ Cookie::$salt = 'david';
  */
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
-		'controller' => 'welcome',
+		'controller' => 'fizzbuzz',
 		'action'     => 'index',
 	));
