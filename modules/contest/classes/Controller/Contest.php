@@ -39,23 +39,21 @@ class Controller_Contest extends Controller {
 		// If a post request comes in, handle it here
 		if ($_POST)
 		{
-			$person = ORM::factory('person');
-			$person->firstname = $_POST['firstname'];
-			$person->email = $_POST['email'];
 			try
 			{
+				$person = ORM::factory('person');
+				$person->firstname = $_POST['firstname'];
+				$person->email = $_POST['email'];
 				$person->save();
 			}
 			catch (ORM_Validation_Exception $e)
 			{
 				$errors = $e->errors('person');
-				$view->bind('errors', $errors);
-				$this->response->body($view);
 				print_r($errors);
 			}
 
 
-			$this->redirect('contest/details/'.$person->id);
+			/*$this->redirect('contest/details/'.$person->id);*/
 
 /*			try
 			{
@@ -96,6 +94,8 @@ class Controller_Contest extends Controller {
 
 		// Render the view
 		$view->home = URL::site('').'contest';
+		$view->bind('errors', $errors);
+		print_r($errors);
 		$this->response->body($view);
 	}
 
