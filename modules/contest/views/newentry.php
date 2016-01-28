@@ -6,13 +6,24 @@
 <body>
 	<h1>Contest</h1>
 
-	<form>
-		First Name:<br>
-		<input type="text" name="firstname" value=<?php echo $firstname ?>><br>
-		Email:<br>
-		<input type="text" name="email" value=<?php echo $email ?>> <br>
-		<br>
-		<input type="submit" value="Submit">
-	</form>
+	<?php
+		echo Form::open();
+
+		echo Form::label('firstname', 'First Name');
+		echo '<br />';
+		echo Form::input('firstname', $firstname);
+		echo '<br />';
+
+		echo '<br />';
+
+		echo Form::label('email', 'E-mail');
+		echo '<br />';
+		echo Form::input('email', $email);
+		echo '<br />';
+
+		echo Form::submit('submit', 'Submit');
+
+		echo Form::close();
+	?>
 </body>
 </html>

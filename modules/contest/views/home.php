@@ -4,30 +4,24 @@
 	<title></title>
 </head>
 <body>
-	<?php
-		echo $data
-	?>
-	<a href='contest/details'>Create New Entry</a>
+	<a href='./contest/details'>Create New Entry</a>
+	<br/>
+	<a href='./contest/add'>EOIWNJFOEWIJFOEWJ</a>
 	<table>
 		<tr>
 		    <td><strong>First Name</strong></td>
 		    <td><strong>Email</strong></td>		
 	  	</tr>
-	  <tr>
-	    <td>Jwefwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwfwe</td>
-	    <td>Smith</td>		
-	    <td>50</td>
-	  </tr>
-	  <tr>
-	    <td>Eve</td>
-	    <td>Jackson</td>		
-	    <td>94</td>
-	  </tr>
-	  <tr>
-	    <td>John</td>
-	    <td>Doe</td>		
-	    <td>80</td>
-	  </tr>
+	  	<?php 
+	  		foreach( $table as $t )
+	  		{
+	  			echo '<tr>';
+	  			echo '<td>'.$t->firstname.'</td>';
+	  			echo '<td>'.$t->email.'</td>';
+	  			echo '<td><a href=\'./contest/details/'.$t->id.'\'>Edit</a></td>';
+	  			echo '</tr>';
+	  		}
+	  	?>
 	</table>
 </body>
 </html>
