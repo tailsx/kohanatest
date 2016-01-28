@@ -39,6 +39,8 @@ class Controller_Contest extends Controller {
 			$user->email = $_POST['email'];
 			$user->save();
 
+			$this->redirect('contest/details/'.$user->id);
+
 /*			try
 			{
 				// Try and save
@@ -56,7 +58,9 @@ class Controller_Contest extends Controller {
 			print_r($this->request->uri());
 			print_r($this->request->url()."/".$user->id);
 			$this->redirect("/".$user->id);*/
+
 		}
+		print_r(URL::site(''));
 
 		// Set variables to send to view
 		$view = View::factory('newentry');

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title></title>
+	<base href="<?php echo url::base(); ?>" />
 </head>
 <body>
 	<a href='./contest/details'>Create New Entry</a>
