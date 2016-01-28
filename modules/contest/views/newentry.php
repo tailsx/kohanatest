@@ -8,9 +8,9 @@
 
 	<form>
 		First Name:<br>
-		<input type="text" name="first"><br>
-		Last Name:<br>
-		<input type="text" name="last"><br>
+		<input type="text" name="firstname" value=<?php echo $firstname ?>><br>
+		Email:<br>
+		<input type="text" name="email" value=<?php echo $email ?>> <br>
 		<br>
 		<input type="submit" value="Submit">
 	</form>

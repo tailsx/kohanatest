@@ -43,11 +43,27 @@ class Controller_Contest extends Controller {
 
 	public function action_details()
 	{
+		// Set variables to send to view
 		$view = View::factory('newentry');
+		$view->firstname = NULL;
+		$view->email = NULL;
+
+		// retrieve id parameter
+		$id = $this->request->param('id', NULL);
+		
+		// If id exists, overwrite view variables to ones existing in database.
+		if ($id != NULL)
+		{
+
+			// Find user with id
+			$user = ORM::factory('user', $id);
+			$view->firstname = $user->firstname;
+			$view->email = $user->email;
+		}
 
 		$this->response->body($view);
 	}
 
-	
+
 
 } // End Contest
