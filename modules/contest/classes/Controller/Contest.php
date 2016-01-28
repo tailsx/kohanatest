@@ -4,10 +4,10 @@ class Controller_Contest extends Controller {
 
 	public function action_index()
 	{
-/*		$user = ORM::factory("Users");
+/*		$user = ORM::factory("user");
 
-		$user->firstname = "Admini";
-		$user->email = "Strator";
+		$user->id = 1;
+		$user->name = "Strator";
 
 		try
 		{
@@ -19,11 +19,35 @@ class Controller_Contest extends Controller {
 		// Catch errors, make dollars
 		$errors = $e->errors('User');
 		}*/
-		$sqlResult = ORM::factory("Users")->where("firstname", "=", "david")->find();
-		print_r($sqlResult->as_array());
+/*		$sqlResult = ORM::factory("User")->where("firstname", "=", "david")->find();
+		print_r($sqlResult->as_array());*/
+
+		$customers = ORM::factory("user");
+	 	$customers = $customers->find_all();
+
+ 	 	$output = "<ol>";
+
+ 	 	foreach( $customers as $customer )
+ 	 	{
+ 	 	 	 $output .= "<li>{$customer->firstname}, {$customer->email}</li>";
+ 	 	}
+
+ 	 	$output .= "</ol>";
+
 
 		$view = View::factory('home');
+
+		$view->data = $output;
 		$this->response->body($view);
 	}
+
+	public function action_details()
+	{
+		$view = View::factory('newentry');
+
+		$this->response->body($view);
+	}
+
+	
 
 } // End Contest
