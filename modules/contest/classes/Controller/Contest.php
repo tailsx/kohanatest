@@ -36,6 +36,10 @@ class Controller_Contest extends Controller {
 		$view->firstname = NULL;
 		$view->email = NULL;
 
+		// have a variable to redirect or not
+		$redirect = FALSE;
+		$redirect_link = NULL;
+
 		// If a post request comes in, handle it here
 		if ($_POST)
 		{
@@ -45,11 +49,13 @@ class Controller_Contest extends Controller {
 				$person->firstname = $_POST['firstname'];
 				$person->email = $_POST['email'];
 				$person->save();
+
+				$redirect = TRUE;
+				$redirect_link = 'contest/details/'.$person->id;
 			}
 			catch (ORM_Validation_Exception $e)
 			{
 				$errors = $e->errors('person');
-				print_r($errors);
 			}
 
 
@@ -74,7 +80,7 @@ class Controller_Contest extends Controller {
 			$this->redirect("/".$user->id);*/
 
 		}
-		print_r(URL::site(''));
+
 
 		// retrieve id parameter
 		$id = $this->request->param('id', NULL);
@@ -95,8 +101,14 @@ class Controller_Contest extends Controller {
 		// Render the view
 		$view->home = URL::site('').'contest';
 		$view->bind('errors', $errors);
-		print_r($errors);
-		$this->response->body($view);
+		if($redirect)
+		{
+			$this->redirect($redirect_link);
+		}
+		else
+		{
+			$this->response->body($view);
+		}
 	}
 
 
