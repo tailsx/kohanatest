@@ -4,6 +4,8 @@
 	<title></title>
 </head>
 <body>
+	<a href='<?php echo $home ?>'>Home</a>
+	<?php $errors ?>
 	<h1>Contest</h1>
 
 	<?php

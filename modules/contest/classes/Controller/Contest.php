@@ -31,15 +31,31 @@ class Controller_Contest extends Controller {
 	// action that displays the 
 	public function action_details()
 	{
+		// Set variables to send to view
+		$view = View::factory('newentry');
+		$view->firstname = NULL;
+		$view->email = NULL;
+
 		// If a post request comes in, handle it here
 		if ($_POST)
 		{
-			$user = ORM::factory('person');
-			$user->firstname = $_POST['firstname'];
-			$user->email = $_POST['email'];
-			$user->save();
+			$person = ORM::factory('person');
+			$person->firstname = $_POST['firstname'];
+			$person->email = $_POST['email'];
+			try
+			{
+				$person->save();
+			}
+			catch (ORM_Validation_Exception $e)
+			{
+				$errors = $e->errors('person');
+				$view->bind('errors', $errors);
+				$this->response->body($view);
+				print_r($errors);
+			}
 
-			$this->redirect('contest/details/'.$user->id);
+
+			$this->redirect('contest/details/'.$person->id);
 
 /*			try
 			{
@@ -62,11 +78,6 @@ class Controller_Contest extends Controller {
 		}
 		print_r(URL::site(''));
 
-		// Set variables to send to view
-		$view = View::factory('newentry');
-		$view->firstname = NULL;
-		$view->email = NULL;
-
 		// retrieve id parameter
 		$id = $this->request->param('id', NULL);
 
@@ -74,16 +85,17 @@ class Controller_Contest extends Controller {
 		if ($id != NULL)
 		{
 			// Find user with id
-			$user = ORM::factory('person');
-			$user->where('id', '=', $id);
-			$user->find();
+			$person = ORM::factory('person');
+			$person->where('id', '=', $id);
+			$person->find();
 
 			// update the autofield values with database values
-			$view->firstname = $user->firstname;
-			$view->email = $user->email;
+			$view->firstname = $person->firstname;
+			$view->email = $person->email;
 		}
 
 		// Render the view
+		$view->home = URL::site('').'contest';
 		$this->response->body($view);
 	}
 
