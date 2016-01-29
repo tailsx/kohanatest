@@ -4,10 +4,10 @@
 	<title></title>
 </head>
 <body>
-	<a href='./contest'>Contest</a>
 	<?php
 		echo '<a href=\'';
-		echo './contest\'>';
+		echo $contest;
+		echo '\'>';
 		echo __('Contest');
 		echo '</a>'; 
 		echo __('Hello, world!');

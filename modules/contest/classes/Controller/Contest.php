@@ -12,6 +12,7 @@ class Controller_Contest extends Controller {
 		// Give data to view to display
 		$view = View::factory('home');
 		$view->bind ('table', $people);
+		$view->test = Route::url('default', array('controller' => 'contest', 'action' => 'details'), NULL, Request::$lang);
 		$this->response->body($view);
 	}
 
@@ -22,7 +23,7 @@ class Controller_Contest extends Controller {
 		$view = View::factory('newentry');
 		$view->firstname = NULL;
 		$view->email = NULL;
-		$view->home = URL::site('').'contest';
+		$view->home = Route::url('default', array('controller' => 'contest'), NULL);
 
 		// Set up variables for redirect if needed
 		$redirect_flag = FALSE;

@@ -4,13 +4,17 @@
 	<title>Part 2: Contest</title>
 </head>
 <body>
-	<a href='./contest/details'><?php echo __('Create New Entry') ?></a>
-<!-- 	<table>
-		<tr>
-		    <td><strong>First Name</strong></td>
-		    <td><strong>Email</strong></td>		
-	  	</tr> -->
 	  	<?php
+
+	  		// Naviagtion
+			echo '<a href=\'';
+			echo $test;
+			echo '\'>';
+			echo __('Create New Entry');
+			echo '</a>';
+			echo '<br />';
+			echo '<br />';
+
 	  		if(!empty($table)){
 	  			echo '<br>';
 		  		echo '<br>'; 
