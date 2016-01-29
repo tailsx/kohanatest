@@ -7,37 +7,25 @@ class Controller_Contest extends Controller {
 
 		// Retrieve all entries from the person model
 		$person = ORM::factory("person");
-	 	$person = $person->find_all();
+	 	$people = $person->find_all()->as_array();
 
-/* 	 	$output = "<ol>";
-
- 	 	foreach( $customers as $customer )
- 	 	{
- 	 	 	 $output .= "<li>{$customer->firstname}, {$customer->email}</li>";
- 	 	}
-
- 	 	$output .= "</ol>";
-
-
-		$view = View::factory('home');
-
-		$view->table = $output;*/
 		// Give data to view to display
 		$view = View::factory('home');
-		$view->table = $person;
+		$view->bind ('table', $people);
 		$this->response->body($view);
 	}
 
-	// action that displays the 
+	// action responsible for adding and editing records
 	public function action_details()
 	{
-		// Set variables to send to view
+		// Set up view variables here that will be needed
 		$view = View::factory('newentry');
 		$view->firstname = NULL;
 		$view->email = NULL;
+		$view->home = URL::site('').'contest';
 
-		// have a variable to redirect or not
-		$redirect = FALSE;
+		// Set up variables for redirect if needed
+		$redirect_flag = FALSE;
 		$redirect_link = NULL;
 
 		// If a post request comes in, handle it here
@@ -45,39 +33,22 @@ class Controller_Contest extends Controller {
 		{
 			try
 			{
+				// Set record to be added
 				$person = ORM::factory('person');
 				$person->firstname = $_POST['firstname'];
 				$person->email = $_POST['email'];
+
+				// Try and store it
 				$person->save();
 
-				$redirect = TRUE;
+				// If everything goes well, change the flag to signal redirect
+				$redirect_flag = TRUE;
 				$redirect_link = 'contest/details/'.$person->id;
 			}
 			catch (ORM_Validation_Exception $e)
 			{
 				$errors = $e->errors('person');
 			}
-
-
-			/*$this->redirect('contest/details/'.$person->id);*/
-
-/*			try
-			{
-				// Try and save
-				$user->save();
-			}
-			catch (ORM_Validation_Exception $e)
-			{
-				// Catch errors, make dollars
-				$errors = $e->errors('person');
-			}*/
-
-/*			print_r($user);
-			print_r($user->id);
-			print_r(URL::base());
-			print_r($this->request->uri());
-			print_r($this->request->url()."/".$user->id);
-			$this->redirect("/".$user->id);*/
 
 		}
 
@@ -98,10 +69,11 @@ class Controller_Contest extends Controller {
 			$view->email = $person->email;
 		}
 
-		// Render the view
-		$view->home = URL::site('').'contest';
+		// Bind errors to this view
 		$view->bind('errors', $errors);
-		if($redirect)
+
+		// Decide if we need to redirect
+		if($redirect_flag)
 		{
 			$this->redirect($redirect_link);
 		}
@@ -110,20 +82,6 @@ class Controller_Contest extends Controller {
 			$this->response->body($view);
 		}
 	}
-
-
-	public function action_add()
-	{
-		$user = ORM::factory('person');
-		$user->firstname = 'fweewfwfwe';
-		$user->email = 'fwefwefefwefaw';
-		
-		
-		$view = View::factory('test')
-			->bind('errors', $errors);
-		$this->response->body($view);
-	}
-
 
 
 
