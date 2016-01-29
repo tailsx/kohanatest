@@ -1,19 +1,12 @@
-# Kohana PHP Framework
+# Part 2: Contest
 
-[Kohana](http://kohanaframework.org/) is an elegant, open source, and object oriented HMVC framework built using PHP5, by a team of volunteers. It aims to be swift, secure, and small.
+Created a contest module.  Wanted to encapsulation the contest stuff as much as I can.  I kept the fizzbuzz stuff out because in the video, it seemed unrelated and unneccessary.  I spent more time on this part than I would like due to problems I faced which are listed below.
 
-Released under a [BSD license](http://kohanaframework.org/license), Kohana can be used legally for any open source, commercial, or personal project.
+### Problems/Reflection
 
-## Documentation
-Kohana's documentation can be found at <http://kohanaframework.org/documentation> which also contains an API browser.
-
-The `userguide` module included in all Kohana releases also allows you to view the documentation locally. Once the `userguide` module is enabled in the bootstrap, it is accessible from your site via `/index.php/guide` (or just `/guide` if you are rewriting your URLs).
-
-## Reporting bugs
-If you've stumbled across a bug, please help us out by [reporting the bug](http://dev.kohanaframework.org/projects/kohana3/) you have found. Simply log in or register and submit a new issue, leaving as much information about the bug as possible, e.g.
-
-* Steps to reproduce
-* Expected result
-* Actual result
-
-This will help us to fix the bug as quickly as possible, and if you'd like to fix it yourself feel free to [fork us on GitHub](https://github.com/kohana) and submit a pull request!
+*  Learned during this part that everything still works even if I make my files in the modules folder.  This is the reason I made a contest module.
+*  Problem with deprecated sql connection.  Switched to pdo.
+*  pdo had undefined methods, found a [file](https://github.com/tailsx/kohanatest/blob/Part2/application/classes/database/pdo.php) to help me quickly move on from that problem.
+*  Had a problem with naming convention of my model.  Had it named User before I changed it to person.  Found the error when exception said lastname was not defined, which isn't a field that is defined.
+*  Needed to add a [url](https://github.com/tailsx/kohanatest/blob/Part2/application/config/url.php) file to let application trust localhost
+*  Detecting a post request is a bit different than what I was used to in Javascript. 
