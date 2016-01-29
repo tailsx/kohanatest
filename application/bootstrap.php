@@ -148,11 +148,11 @@ Cookie::$salt = 'david';
  * defaults for the URI.
  */
 Route::set('default', '(<controller>(/<action>(/<id>)))')
-	->defaults(array(
-		'controller' => 'welcome',
-		'action'     => 'index',
-	))
-	->translate(array(
+    ->defaults(array(
+        'controller' => 'welcome',
+        'action'     => 'index',
+    ))
+    ->translate(array(
         '<controller>' => TRUE,
         '<action>'     => TRUE,
     ));

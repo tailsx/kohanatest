@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Part 2: Contest</title>
+	<title>Part 3</title>
 </head>
 <body>
 	  	<?php
@@ -15,6 +15,7 @@
 			echo '<br />';
 			echo '<br />';
 
+			// If there's data, print.  Else, say theres no data
 	  		if(!empty($table)){
 	  			echo '<br>';
 		  		echo '<br>'; 
@@ -46,6 +47,5 @@
 		  		echo 'No data';
 		  	}
 	  	?>
-<!-- 	</table> -->
 </body>
 </html>

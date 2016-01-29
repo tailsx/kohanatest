@@ -4,7 +4,6 @@ class Controller_Contest extends Controller {
 
 	public function action_index()
 	{
-
 		// Retrieve all entries from the person model
 		$person = ORM::factory("person");
 	 	$people = $person->find_all()->as_array();
@@ -23,7 +22,7 @@ class Controller_Contest extends Controller {
 		$view = View::factory('newentry');
 		$view->firstname = NULL;
 		$view->email = NULL;
-		$view->home = Route::url('default', array('controller' => 'contest'), NULL);
+		$view->home = Route::url('default', array('controller' => 'contest'), NULL, Request::$lang);
 
 		// Set up variables for redirect if needed
 		$redirect_flag = FALSE;

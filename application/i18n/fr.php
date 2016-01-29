@@ -2,17 +2,24 @@
 
 return array(
 
-	'French' => 'Français',
-	'First Name' => 'Prénom',
-	'Email' => 'Adresse e-mail',
+	// Route translations
 	'contest' => 'concours',
 	'details' => 'details',
-	'Hello, world!' => 'Bonjour, monde!',
+
+	// Forms
+	'First Name' => 'Prénom',
+	'Email' => 'Adresse e-mail',
+	'Edit' => 'Modifier',
+	'Submit' => 'Envoi',
+
+	//Navigation
+	'Home' => 'HOMEFR',
 	'Contest' => 'Concours',
 	'Create New Entry' => 'Créer une nouvelle entree',
-	'Edit' => 'Modifier',
+
+	//Miscellaneous
 	'No data' => 'Pas de données',
-	'Submit' => 'Envoi',
-	'Home' => 'HOMEFR',
+	'French' => 'Français',
+	'Hello, world!' => 'Bonjour, monde!',
 
 );
