@@ -4,9 +4,15 @@ return array(
 
 	'French' => 'Français',
 	'First Name' => 'Prénom',
-	'email' => 'Adresse e-mail',
+	'Email' => 'Adresse e-mail',
 	'contest' => 'concours',
-	'details' => 'detailsFR',
+	'details' => 'details',
 	'Hello, world!' => 'Bonjour, monde!',
+	'Contest' => 'Concours',
+	'Create New Entry' => 'Créer une nouvelle entree',
+	'Edit' => 'Modifier',
+	'No data' => 'Pas de données',
+	'Submit' => 'Envoi',
+	'Home' => 'HOMEFR',
 
 );

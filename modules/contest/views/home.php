@@ -4,7 +4,7 @@
 	<title>Part 2: Contest</title>
 </head>
 <body>
-	<a href='./contest/details'>Create New Entry</a>
+	<a href='./contest/details'><?php echo __('Create New Entry') ?></a>
 <!-- 	<table>
 		<tr>
 		    <td><strong>First Name</strong></td>
@@ -16,15 +16,21 @@
 		  		echo '<br>'; 
 	  			echo '<table>';
 	  			echo '<tr>';
-	  			echo '<td><strong>First Name</strong></td>';
-	  			echo '<td><strong>Email</strong></td>';		
+	  			echo '<td><strong>';
+	  			echo __('First Name');
+	  			echo '</strong></td>';
+	  			echo '<td><strong>';
+	  			echo __('Email');
+	  			echo '</strong></td>';		
 	  			echo '</tr>';
 	  			foreach( $table as $t )
 		  		{
 		  			echo '<tr>';
 		  			echo '<td>'.$t->firstname.'</td>';
 		  			echo '<td>'.$t->email.'</td>';
-		  			echo '<td><a href=\'./contest/details/'.$t->id.'\'>Edit</a></td>';
+		  			echo '<td><a href=\'./contest/details/'.$t->id.'\'>';
+		  			echo __('Edit');
+		  			echo '</a></td>';
 		  			echo '</tr>';
 		  		}
 		  		echo '<table>';

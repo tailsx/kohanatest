@@ -4,14 +4,24 @@
 	<title></title>
 </head>
 <body>
-	<a href='<?php echo $home ?>'>Home</a>
-
-	<h1>Contest</h1>
-
 	<?php
+
+		// Naviagtion
+		echo '<a href=\'';
+		echo $home;
+		echo '\'>';
+		echo __('Home');
+		echo '</a>';
+		echo '<br />';
+		echo '<br />';
+
+		// Heading
+		echo '<h1>Contest</h1>';
+
+		// Form
 		echo Form::open();
 
-		echo Form::label('firstname', 'First Name');
+		echo Form::label('firstname', __('First Name'));
 		echo '<br />';
 		if (!empty($errors['firstname']))
 		{
@@ -23,7 +33,7 @@
 
 		echo '<br />';
 
-		echo Form::label('email', 'E-mail');
+		echo Form::label('email', __('Email'));
 		echo '<br />';
 		if (!empty($errors['email']))
 		{
@@ -33,7 +43,7 @@
 		echo Form::input('email', $email);
 		echo '<br />';
 
-		echo Form::submit('submit', 'Submit');
+		echo Form::submit('submit', __('Submit'));
 
 		echo Form::close();
 	?>

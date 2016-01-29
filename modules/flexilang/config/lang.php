@@ -22,13 +22,7 @@ return array(
 	'fr' => array(
 		'i18n_code'    => 'fr-fr',
 		'locale'       => array('fr_FR.utf-8'),
-        'translations' => array(
-        	'French' => 'Français',
-			'First Name' => 'Prénom',
-			'email' => 'Adresse e-mail',
-			'contest' => 'concours',
-			'details' => 'detailse',
-        ),
+        'translations' => array(),
 	),
 
 );

@@ -160,6 +160,6 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 /**
  * Setting language variables here for flexilang module
  */
-/*Lang::$default = 'en';
+Lang::$default = 'en';
 //Lang::$default_prepended = FALSE;
-Lang::$i18n_routes = TRUE;*/
+Lang::$i18n_routes = TRUE;

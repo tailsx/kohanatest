@@ -5,6 +5,12 @@
 </head>
 <body>
 	<a href='./contest'>Contest</a>
-	Hello, world!
+	<?php
+		echo '<a href=\'';
+		echo './contest\'>';
+		echo __('Contest');
+		echo '</a>'; 
+		echo __('Hello, world!');
+	?>
 </body>
 </html>
