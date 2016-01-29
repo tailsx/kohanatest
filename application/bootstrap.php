@@ -151,4 +151,15 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'controller' => 'welcome',
 		'action'     => 'index',
-	));
+	))
+	->translate(array(
+        '<controller>' => TRUE,
+        '<action>'     => TRUE,
+    ));
+
+/**
+ * Setting language variables here for flexilang module
+ */
+/*Lang::$default = 'en';
+//Lang::$default_prepended = FALSE;
+Lang::$i18n_routes = TRUE;*/
